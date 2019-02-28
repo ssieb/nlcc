@@ -4,6 +4,9 @@ import pickle
 from pathlib import Path
 from api import doGet, doPost
 
+F1PID = "245145"  # field ID for the Fellowship 1 personal ID
+F1HID = "245146"  # field ID for the Fellowship 1 household ID
+
 loaded = False
 people = {}
 iMap = {}
@@ -46,10 +49,10 @@ def getPeople(onlyActive=False):
       if field["type"] != "FieldDatum":
         continue
       rel = field["relationships"]
-      if rel["field_definition"]["data"]["id"] == "245145":
+      if rel["field_definition"]["data"]["id"] == F1PID:
         iid = rel["customizable"]["data"]["id"]
         people[iid][1] = field["attributes"]["value"]
-      elif rel["field_definition"]["data"]["id"] == "245146":
+      elif rel["field_definition"]["data"]["id"] == F1HID:
         iid = rel["customizable"]["data"]["id"]
         people[iid][2] = field["attributes"]["value"]
 
