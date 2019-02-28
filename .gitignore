@@ -1,3 +1,9 @@
+# VIM swap files
 .*.swp
+
+# the API key
 api.key
+
+# the pickled people data
+people.pkl
 
