@@ -7,3 +7,6 @@ api.key
 # the pickled people data
 people.pkl
 
+# CSV files
+*.csv
+
