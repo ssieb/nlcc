@@ -1,12 +1,18 @@
 # VIM swap files
 .*.swp
 
-# the API key
+# API key
 api.key
 
-# the pickled people data
-people.pkl
+# pickled data
+*.pkl
 
 # CSV files
 *.csv
+
+# Python cache
+__pycache__
+
+# LibreOffice temp files
+.~*
 
