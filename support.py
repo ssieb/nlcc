@@ -44,7 +44,8 @@ def getPeople(onlyActive=False):
     count += int(data["meta"]["count"])
     print(f"{count}/{total} people\r", end="", flush=True)
     for person in data["data"]:
-      people[person["id"]] = [person["attributes"]["name"], None, None]
+      attr = person["attributes"]
+      people[person["id"]] = [attr["name"], None, None, attr["first_name"], attr["last_name"]]
     for field in data["included"]:
       if field["type"] != "FieldDatum":
         continue
@@ -59,7 +60,7 @@ def getPeople(onlyActive=False):
   print(f"total: {len(people)}/{count}/{total}")
 
   iMap = {}
-  for pcid, [name, iid, hid] in people.items():
+  for pcid, [name, iid, hid, fn, ln] in people.items():
     iMap[iid] = pcid
   print("write pickled people")
   with open('people.pkl', 'wb') as pkl:
