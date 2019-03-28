@@ -9,6 +9,7 @@ from support import getPeople
 
 moneyMatch = re.compile(r'-?\$(\d+,)?\d+\.\d+')
 moneyStrip = re.compile(r'[$,]')
+number = re.compile(r'\d+')
 
 newBatch = {"data": {"type": "Batch", "attributes": {"description": ""}}}
 def createBatch(groupID, name):
@@ -124,6 +125,23 @@ while True:
   else:
     break
 
+print("fetch batches\r", end="", flush=True)
+doneBatches = set()
+url = "https://api.planningcenteronline.com/giving/v2/batches?per_page=100"
+count = 0
+while True:
+  data = doGet(url)
+  total = int(data["meta"]["total_count"])
+  count += int(data["meta"]["count"])
+  print(f"fetch batches {count}/{total}\r", end="", flush=True)
+  for batch in data['data']:
+    doneBatches.add(batch["attributes"]["description"])
+  if "next" in data['links']:
+    url = data['links']['next']
+  else:
+    break
+print()
+
 indiv = {}
 house = {}
 with open("people.csv", "r") as csvfile:
@@ -235,6 +253,8 @@ with open("donations.csv", "r") as csvfile:
       raise Exception(f"unknown source: {dSource}")
     dSource = sources[dSource]
     checkNum = row['Reference']
+    if number.match(checkNum) is None:
+      checkNum = None
     donation = [cid, amount, rdate.strftime("%Y-%m-%d"), method, checkNum, dSource, fundID, lblList]
     batch.append(donation)
 if notfound:
@@ -255,6 +275,8 @@ for i, bGroup in enumerate(bGroups):
   blist = [k for k, v in batches.items() if v[0] == bGroup]
   blist.sort()
   for j, bName in enumerate(blist):
+    if bName in doneBatches:
+      continue
     print(f"{j+1}/{len(blist)} Creating batch {bName}")
     batch = batches[bName][1]
     bid = createBatch(gid, bName)
