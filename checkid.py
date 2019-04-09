@@ -41,12 +41,12 @@ with open("people-all.csv", "r") as csvfile:
       print(f"{contrib[iid]} is {iid} / {hid}")
       continue
     for pid, info in people.items():
-      if info[3] == fn and info[4] == ln:
+      if info["first"] == fn and info["last"] == ln:
         dups += 1
     s = f"ID {iid} ({fn} {ln}) ({dups}) is with:"
     for pid, info in people.items():
-      if info[2] == hid:
-        s += f" {info[0]}({info[1]})"
+      if info["hid"] == hid:
+        s += f" {info['name']}({info['pid']})"
     print(s)
 
 

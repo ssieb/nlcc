@@ -45,23 +45,23 @@ def getPeople(onlyActive=False):
     print(f"{count}/{total} people\r", end="", flush=True)
     for person in data["data"]:
       attr = person["attributes"]
-      people[person["id"]] = [attr["name"], None, None, attr["first_name"], attr["last_name"]]
+      people[person["id"]] = {"name": attr["name"], "pid": None, "hid": None, "first": attr["first_name"], "last": attr["last_name"]]
     for field in data["included"]:
       if field["type"] != "FieldDatum":
         continue
       rel = field["relationships"]
       if rel["field_definition"]["data"]["id"] == F1PID:
         iid = rel["customizable"]["data"]["id"]
-        people[iid][1] = field["attributes"]["value"]
+        people[iid]["pid"] = field["attributes"]["value"]
       elif rel["field_definition"]["data"]["id"] == F1HID:
         iid = rel["customizable"]["data"]["id"]
-        people[iid][2] = field["attributes"]["value"]
+        people[iid]["hid"] = field["attributes"]["value"]
 
   print(f"total: {len(people)}/{count}/{total}")
 
   iMap = {}
-  for pcid, [name, iid, hid, fn, ln] in people.items():
-    iMap[iid] = pcid
+  for pcid, info in people.items():
+    iMap[info["pid"]] = pcid
   print("write pickled people")
   with open('people.pkl', 'wb') as pkl:
     pickle.dump(people, pkl)

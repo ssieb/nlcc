@@ -19,7 +19,7 @@ toRemove = set()
 for iid, houses in pMap.items():
   if len(houses) > 1:
     count += 1
-    s = f"{people[iid][0]} has {len(houses)} households:"
+    s = f"{people[iid]['name']} has {len(houses)} households:"
     for hid in houses:
       num = len(households[hid])
       if num == 1:
