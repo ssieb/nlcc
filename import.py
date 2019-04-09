@@ -1,5 +1,24 @@
 #!/usr/bin/python3
 
+"""
+This donation import script is quite specific to our use case and
+is unlikely to be directly usable for anyone else.
+
+Requires a fundmap.csv to convert the F1 funds to PCO funds.
+Columns:
+Fund - value from the donation Fund column
+SubFund - value from the donation SubFund column (can be empty)
+PCOFund - name of the fund to use in PCO
+Label - optional label to put on the donation
+
+Uses a batchmap.csv to map donations to PCO sources.
+Columns:
+Contains - if this string is in the batch name, use the following values
+Source - PCO source to use for this donation
+Label - optional label to put on the donation
+Group - value to add to the batch group name
+"""
+
 import csv
 from datetime import datetime
 import re
@@ -103,7 +122,7 @@ with open("fundmap.csv", "r") as csvfile:
     fund = row["Fund"]
     if row["SubFund"] != "":
       fund = row["SubFund"]
-    fundMap[fund] = (row["PCOFund"], row["Labels"])
+    fundMap[fund] = (row["PCOFund"], row["Label"])
 
 batchMap = {}
 with open("batchmap.csv", "r") as csvfile:
